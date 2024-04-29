@@ -1,2 +1,8 @@
 # 2048
-A React and Tailwind CSS implementation of the classic 2048 game.
+
+React + Tailwind CSS
+
+
+## Reference
+
+- https://github.com/gd4Ark/2048/blob/master/index.html
