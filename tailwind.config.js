@@ -50,10 +50,22 @@ module.exports = {
             opacity: 0,
           },
         },
+
+        spawn: {
+          '0%': {
+            transform: 'scale(0)',
+            opacity: 0,
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: 1,
+          },
+        },
       },
 
       animation: {
         moveup: 'moveup 2s ease-out',
+        spawn: 'spawn 0.5s ease-out',
       },
 
 

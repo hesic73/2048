@@ -1,6 +1,30 @@
 import React from "react";
 
 
+
+
+/**
+ * 
+ * @param {Object} props
+ * @param {number} props.exp
+ * @returns 
+ */
+function GridCell({ exp }) {
+
+    const [bg_color, text_color] = getBgColorAndTextColor(exp);
+
+    const text = exp === 0 ? "" : (2 ** exp).toString();
+
+    const font_size = getFontSize(text);
+
+    return (
+        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size}`}>
+            {text}
+        </div>
+    );
+}
+
+
 /**
  * 
  * @param {string} text
@@ -21,16 +45,27 @@ function getFontSize(text) {
 
 /**
  * 
- * @param {Object} props
- * @param {number} props.exp
- * @returns 
+ * @param {number} exp 
+ * @returns {Array<string, string>}
  */
-function GridCell({ exp }) {
+function getBgColorAndTextColor(exp) {
+
+
+    // Weirdly this doesn't work
+
+    // let bg_color = exp >= 0 && exp <= 11 ? `bg-grid_cell_${exp}` : "";
+    // let text_color = exp > 0 && exp <= 11 ? `text-grid_cell_text_${exp}` : "";
+
+    // if (exp < 0 || exp > 11) {
+    //     alert("Invalid exp value: " + exp);
+    //     bg_color = "";
+    //     text_color = "";
+    // }
+
 
     let bg_color;
     let text_color;
 
-    // 字符串拼接有莫名的bug。也许和tailwindcss有关。
     switch (exp) {
         case 0:
             bg_color = "bg-grid_cell_0";
@@ -99,15 +134,7 @@ function GridCell({ exp }) {
             text_color = "";
     }
 
-    const text = exp === 0 ? "" : (2 ** exp).toString();
-
-    const font_size = getFontSize(text);
-
-    return (
-        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size}`}>
-            {text}
-        </div>
-    );
+    return [bg_color, text_color];
 }
 
 export default GridCell;
