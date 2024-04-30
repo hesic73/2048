@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className='flex flex-col min-h-screen bg-background_color'>
-      <div className="flex-1 mx-auto max-w-md">
+      <div className="flex-1 mx-auto w-72 xl:w-[450px]">
         <Header></Header>
         <Board exps={exps}></Board>
       </div>

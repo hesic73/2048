@@ -1,5 +1,24 @@
 import React from "react";
 
+
+/**
+ * 
+ * @param {string} text
+ * @returns string
+ */
+function getFontSize(text) {
+    if (text.length === 0) {
+        return "";
+    }
+    if (text.length < 3) {
+        return "text-[35px] xl:text-[53px]";
+    } else if (text.length < 4) {
+        return "text-[25px] xl:text-[45px]";
+    } else {
+        return "text-[21px] xl:text-[33px]";
+    }
+}
+
 /**
  * 
  * @param {Object} props
@@ -82,7 +101,7 @@ function GridCell({ exp }) {
 
     const text = exp === 0 ? "" : (2 ** exp).toString();
 
-    const font_size = text.length > 3 ? "text-4xl" : "text-5xl";
+    const font_size = getFontSize(text);
 
     return (
         <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size}`}>
