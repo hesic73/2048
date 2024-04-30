@@ -22,7 +22,7 @@ function ScoreSection({ text, score}) {
             setShowAnimation(true);  // Trigger the animation
 
             // Automatically hide the animation after it finishes
-            setTimeout(() => setShowAnimation(false), 2000);
+            setTimeout(() => setShowAnimation(false), 500);
 
             previousScore.current = score;  // Update the previous score reference
         }

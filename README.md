@@ -11,7 +11,7 @@ React + Tailwind CSS
 
 ## Limitations
 
-- cannot handle overlapping score addition animations correctly.
+- cannot handle overlapping score addition animations correctly (or maybe I can).
 
 ## Reference
 
