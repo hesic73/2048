@@ -34,7 +34,29 @@ module.exports = {
         grid_cell_text_10: '#f9f6f2',
         grid_cell_text_11: '#f9f6f2',
 
+
+        score_addition: 'rgba(119, 110, 101, 0.9)',
+
       },
+
+      keyframes: {
+        moveup: {
+          '0%': {
+            transform: 'translateY(0)',
+            opacity: 1,
+          },
+          '100%': {
+            transform: 'translateY(-150px)',
+            opacity: 0,
+          },
+        },
+      },
+
+      animation: {
+        moveup: 'moveup 2s ease-out',
+      },
+
+
     },
   },
   plugins: [],

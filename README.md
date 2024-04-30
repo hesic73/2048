@@ -7,10 +7,11 @@ React + Tailwind CSS
 
 - 失败提示
 
-- 分数增加动画效果
-
 - 方块移动、合并、生成动画效果
 
+## Limitations
+
+- cannot handle overlapping score addition animations correctly.
 
 ## Reference
 

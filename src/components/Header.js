@@ -1,12 +1,14 @@
 import React from "react";
 
 import ScoreSection from "./ScoreSection";
+import BestScoreSection from "./BestScoreSection";
 
 /**
  * 
  * @param {Object} props
  * @param {number} props.score 
  * @param {number} props.bestScore
+ * @param {number} props.change
  * @param {()=>voidu} props.OnNewGame
  * @returns 
  */
@@ -17,7 +19,7 @@ function Header({ score, bestScore, OnNewGame }) {
                 <h1 className='text-[31px] xl:text-[74px] leading-[66px] font-bold text-[#776e65]'>2048</h1>
                 <div className="flex space-x-4">
                     <ScoreSection text="SCORE" score={score}></ScoreSection>
-                    <ScoreSection text="BEST" score={bestScore}></ScoreSection>
+                    <BestScoreSection text="BEST" score={bestScore}></BestScoreSection>
                 </div>
             </div>
 
