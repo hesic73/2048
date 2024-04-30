@@ -5,9 +5,11 @@ React + Tailwind CSS
 
 ## TODO
 
-- Responsive Design
+- 失败提示
 
-- Tile Animation
+- 分数增加动画效果
+
+- 方块移动、合并、生成动画效果
 
 
 ## Reference
