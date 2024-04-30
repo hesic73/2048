@@ -1,5 +1,5 @@
 import React from 'react';
-import GridCell from './GridCell';
+import Tile from './Tile';
 
 /**
  * 
@@ -18,7 +18,7 @@ function Board({ exps }) {
 
             <div className="absolute p-3 grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
                 {exps.map((exp, index) => (
-                    exp !== 0 && <GridCell key={index} exp={exp} position={index} />
+                    exp !== 0 && <Tile key={index} exp={exp} position={index} />
                 ))}
             </div>
 

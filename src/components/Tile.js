@@ -10,7 +10,7 @@ import React from "react";
  * @param {number} props.position
  * @returns 
  */
-function GridCell({ exp, position }) {
+function Tile({ exp, position }) {
     const rowStart = Math.floor(position / 4) + 1;
     const colStart = position % 4 + 1;
 
@@ -158,4 +158,4 @@ function getBgColorAndTextColor(exp) {
     return [bg_color, text_color];
 }
 
-export default GridCell;
+export default Tile;

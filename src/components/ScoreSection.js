@@ -7,25 +7,24 @@ import React, { useEffect, useState, useRef } from "react";
  * @param {number} props.score
  * @returns 
  */
-function ScoreSection({ text, score}) {
+function ScoreSection({ text, score }) {
     const [showAnimation, setShowAnimation] = useState(false);
     const [scoreChange, setScoreChange] = useState(0);
     const previousScore = useRef(score);
 
     useEffect(() => {
-        // Calculate the change in score
-        const change = score - previousScore.current;
+        const change = score - previousScore.current;  // Calculate the change in score
 
-        // If the score has changed and it's not the initial render
-        if (change >= 0 && previousScore.current !== score) {
-            setScoreChange(change);  // Set the score change state
-            setShowAnimation(true);  // Trigger the animation
+        if (change > 0) {  // If the score has increased
+            setScoreChange(change);       // Set the score change state
+            setShowAnimation(true);       // Trigger the animation
 
             // Automatically hide the animation after it finishes
             setTimeout(() => setShowAnimation(false), 500);
-
-            previousScore.current = score;  // Update the previous score reference
         }
+
+        // Always update the previous score after processing
+        previousScore.current = score;
     }, [score]);
 
     return (
