@@ -3,6 +3,13 @@
 React + Tailwind CSS
 
 
+## TODO
+
+- Responsive Design
+
+- Tile Animation
+
+
 ## Reference
 
-- https://github.com/gd4Ark/2048/blob/master/index.html
+- https://github.com/gd4Ark/2048

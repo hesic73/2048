@@ -81,8 +81,11 @@ function GridCell({ exp }) {
     }
 
     const text = exp === 0 ? "" : (2 ** exp).toString();
+
+    const font_size = text.length > 3 ? "text-4xl" : "text-5xl";
+
     return (
-        <div className={`w-20 h-20 flex items-center justify-center ${bg_color} ${text_color} font-bold text-3xl`}>
+        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size}`}>
             {text}
         </div>
     );

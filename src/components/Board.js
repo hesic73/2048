@@ -8,18 +8,13 @@ import GridCell from './GridCell';
  * @returns 
  */
 function Board({ exps }) {
-    // Assuming a fixed size of 4x4 grid
-    const size = 4;
-
     return (
-        <div className="flex flex-col justify-center items-center space-y-2 p-4 bg-[#bbada0]">
-            {Array.from({ length: size }).map((_, row) => (
-                <div key={row} className="flex justify-center space-x-2">
-                    {exps.slice(row * size, (row + 1) * size).map((exp, index) => (
-                        <GridCell key={row * size + index} exp={exp} />
-                    ))}
-                </div>
-            ))}
+        <div className="flex flex-col items-center justify-center p-3 bg-[#bbada0] rounded-md w-full mt-4">
+            <div className="grid grid-cols-4 gap-2 w-full">
+                {exps.map((exp, index) => (
+                    <GridCell key={index} exp={exp} />
+                ))}
+            </div>
         </div>
     );
 }
