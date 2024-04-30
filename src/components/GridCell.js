@@ -7,22 +7,43 @@ import React from "react";
  * 
  * @param {Object} props
  * @param {number} props.exp
+ * @param {number} props.position
  * @returns 
  */
-function GridCell({ exp }) {
+function GridCell({ exp, position }) {
+    const rowStart = Math.floor(position / 4) + 1;
+    const colStart = position % 4 + 1;
 
     const [bg_color, text_color] = getBgColorAndTextColor(exp);
-
     const text = exp === 0 ? "" : (2 ** exp).toString();
-
     const font_size = getFontSize(text);
 
+    let row_class, col_class;
+
+    switch (rowStart) {
+        case 1: row_class = "row-start-1"; break;
+        case 2: row_class = "row-start-2"; break;
+        case 3: row_class = "row-start-3"; break;
+        case 4: row_class = "row-start-4"; break;
+        default: break; // Optionally handle unexpected cases
+    }
+
+    switch (colStart) {
+        case 1: col_class = "col-start-1"; break;
+        case 2: col_class = "col-start-2"; break;
+        case 3: col_class = "col-start-3"; break;
+        case 4: col_class = "col-start-4"; break;
+        default: break; // Optionally handle unexpected cases
+    }
+
     return (
-        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size}`}>
+        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${col_class} ${row_class} rounded-[3px]`}>
             {text}
         </div>
     );
 }
+
+
 
 
 /**

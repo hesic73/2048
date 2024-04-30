@@ -17,7 +17,7 @@ function ScoreSection({ text, score}) {
         const change = score - previousScore.current;
 
         // If the score has changed and it's not the initial render
-        if (change !== 0 && previousScore.current !== score) {
+        if (change >= 0 && previousScore.current !== score) {
             setScoreChange(change);  // Set the score change state
             setShowAnimation(true);  // Trigger the animation
 
