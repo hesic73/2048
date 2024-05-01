@@ -2,25 +2,35 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Board from './components/Board';
 import Header from './components/Header';
 
-import { gameStep, checkGameOver, spawnTile, isValid } from './gameLogic';
+import { gameStep, checkGameOver, checkWin, spawnTile, isValid } from './gameLogic';
 
 /**
  * @typedef {import('./types').TileProps} TileProps
  */
 
+const GameState = Object.freeze({
+  IN_PROGRESS: 0,
+  FAILED: 1,
+  WIN: 2
+});
 
 function App() {
 
   const [tiles, setTiles] = useState([]);
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
+
+
+  // 0: Game in progress
+  // 1: failed
+  // 2: win
+  const [gameState, setGameState] = useState(GameState.IN_PROGRESS);
   const tileIdRef = useRef(0);
 
 
 
   const reset = useCallback(() => {
-    setGameOver(false);
+    setGameState(GameState.IN_PROGRESS);
     setScore(0);
     let initialTiles = [];
     spawnTile(initialTiles, tileIdRef); // Add first random tile
@@ -88,14 +98,19 @@ function App() {
       return;
     }
 
+    if (checkWin(newTiles)) {
+      console.log('You win!');
+      setGameState(GameState.WIN);
+    }
+
 
     if (newTiles.length < 16) {
       spawnTile(newTiles, tileIdRef);
     }
 
     if (checkGameOver(newTiles)) {
-      console.log('Game over!');
-      setGameOver(true);
+      console.log('You lose!');
+      setGameState(GameState.FAILED);
     }
 
     setTiles(newTiles);
@@ -112,11 +127,11 @@ function App() {
 
 
   const handleKeyPress = useCallback((event) => {
-    if (gameOver) return;
+    if (gameState !== GameState.IN_PROGRESS) return;
     const keyActionMap = { ArrowUp: 0, ArrowDown: 1, ArrowLeft: 2, ArrowRight: 3 };
     const action = keyActionMap[event.key];
     if (action !== undefined) makeMove(action);
-  }, [gameOver, makeMove]);
+  }, [gameState, makeMove]);
 
 
   useEffect(() => {

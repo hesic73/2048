@@ -171,6 +171,16 @@ export function checkGameOver(tiles) {
 
 /**
  * 
+ * @param {Object[]} tiles 
+ * @returns {boolean}
+ */
+export function checkWin(tiles) {
+    return tiles.some(tile => tile.exp === 11); // Check for 2048 tile
+}
+
+
+/**
+ * 
  * @param {Object[]} currentTiles 
  * @param {React.MutableRefObject<number>} tileIdRef 
  * @returns 
