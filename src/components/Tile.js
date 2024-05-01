@@ -19,6 +19,25 @@ function Tile({ exp, position, newTile }) {
     const text = exp === 0 ? "" : (2 ** exp).toString();
     const font_size = getFontSize(text);
 
+    let positionClass = getPositionClass(rowStart, colStart);
+
+    const newTileAnimation = newTile ? "animate-spawn duration-500" : "";
+
+    return (
+        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${positionClass} ${newTileAnimation} rounded-[3px]`}>
+            {text}
+        </div>
+    );
+}
+
+
+/**
+ * 
+ * @param {number} rowStart 
+ * @param {number} colStart 
+ * @returns {string}
+ */
+function getPositionClass(rowStart, colStart) {
     let row_class, col_class;
 
     switch (rowStart) {
@@ -37,16 +56,8 @@ function Tile({ exp, position, newTile }) {
         default: break; // Optionally handle unexpected cases
     }
 
-    const newTileAnimation = newTile ? "animate-spawn duration-500" : "";
-
-    return (
-        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${col_class} ${row_class} ${newTileAnimation} rounded-[3px]`}>
-            {text}
-        </div>
-    );
+    return `${row_class} ${col_class}`;
 }
-
-
 
 
 /**
@@ -70,7 +81,7 @@ function getFontSize(text) {
 /**
  * 
  * @param {number} exp 
- * @returns {Array<string, string>}
+ * @returns {[string, string]}
  */
 function getBgColorAndTextColor(exp) {
 
