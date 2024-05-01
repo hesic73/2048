@@ -2,8 +2,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Board from './components/Board';
 import Header from './components/Header';
 
-import { gameStep, checkGameOver } from './gameLogic';
+import { gameStep, checkGameOver, spawnTile, isValid } from './gameLogic';
 
+/**
+ * @typedef {import('./types').TileProps} TileProps
+ */
 
 
 function App() {
@@ -41,7 +44,15 @@ function App() {
 
     if (savedTiles) {
       try {
-        const loadedTiles = JSON.parse(savedTiles);
+
+        /**
+         * @type {TileProps[]}
+         */
+        const loadedTiles = JSON.parse(savedTiles).map(tile => ({
+          ...tile,
+          newTile: true
+        }));
+
         if (isValid(loadedTiles)) {
           setTiles(loadedTiles);
           if (checkGameOver(loadedTiles)) {
@@ -135,61 +146,6 @@ function App() {
     </div>
   );
 }
-
-/**
- * 
- * @param {Object[]} currentTiles 
- * @param {React.MutableRefObject<number>} tileIdRef 
- * @returns 
- */
-function spawnTile(currentTiles, tileIdRef) {
-  const emptyIndices = Array.from({ length: 16 }, (_, index) => index).filter(index => !currentTiles.some(tile => tile.position === index));
-  if (emptyIndices.length === 0) {
-    console.log('No space left!');
-    return;
-  }
-  const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-  const newTile = {
-    id: tileIdRef.current++,  // Assume tileIdRef is still defined in your component to keep track of unique IDs
-    exp: Math.random() < 0.8 ? 1 : 2, // Exponent for 2 or 4
-    position: randomIndex,
-  };
-  currentTiles.push(newTile);
-}
-
-
-/**
- * 
- * @param {Object[]} tiles 
- * @returns {boolean}
- */
-function isValid(tiles) {
-  if (!Array.isArray(tiles) || tiles.length > 16 || tiles.length < 2) {
-    return false;
-  }
-
-  const positions = new Set();
-  const ids = new Set();
-
-  for (const tile of tiles) {
-    if (typeof tile !== 'object' || !('id' in tile) || !('exp' in tile) || !('position' in tile)) {
-      return false;
-    }
-    if (typeof tile.id !== 'number' || typeof tile.exp !== 'number' || typeof tile.position !== 'number') {
-      return false;
-    }
-    if (tile.position < 0 || tile.position >= 16 || tile.exp < 1 || tile.exp > 11) { // Assuming exp 11 for 2048
-      return false;
-    }
-    if (positions.has(tile.position) || ids.has(tile.id)) {
-      return false; // Duplicate position or id
-    }
-    positions.add(tile.position);
-    ids.add(tile.id);
-  }
-  return true;
-}
-
 
 
 export default App;

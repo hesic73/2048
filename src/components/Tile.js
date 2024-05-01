@@ -8,9 +8,10 @@ import React from "react";
  * @param {Object} props
  * @param {number} props.exp
  * @param {number} props.position
+ * @param {boolean} props.newTile
  * @returns 
  */
-function Tile({ exp, position }) {
+function Tile({ exp, position, newTile }) {
     const rowStart = Math.floor(position / 4) + 1;
     const colStart = position % 4 + 1;
 
@@ -36,8 +37,10 @@ function Tile({ exp, position }) {
         default: break; // Optionally handle unexpected cases
     }
 
+    const newTileAnimation = newTile ? "animate-spawn duration-500" : "";
+
     return (
-        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${col_class} ${row_class} rounded-[3px]`}>
+        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${col_class} ${row_class} ${newTileAnimation} rounded-[3px]`}>
             {text}
         </div>
     );

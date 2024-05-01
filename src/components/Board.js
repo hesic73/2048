@@ -1,10 +1,15 @@
 import React from 'react';
 import Tile from './Tile';
 
+
+/**
+ * @typedef {import('../types').TileProps} TileProps
+ */
+
 /**
  * 
  * @param {Object} props
- * @param {Array} props.tiles
+ * @param {TileProps[]} props.tiles
  * @returns 
  */
 function Board({ tiles }) {
@@ -18,7 +23,7 @@ function Board({ tiles }) {
 
             <div className="absolute p-3 grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
                 {tiles.map(tile => (
-                    <Tile key={tile.id} exp={tile.exp} position={tile.position} />
+                    <Tile key={tile.id} exp={tile.exp} position={tile.position} newTile={tile.newTile} />
                 ))}
             </div>
 

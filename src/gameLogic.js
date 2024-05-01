@@ -1,15 +1,28 @@
 /**
+ * @typedef {import('./types').TileProps} TileProps
+ */
+
+
+/**
  * 
- * @param {Object[]} tiles 
+ * @param {TileProps[]} tiles 
  * @param {React.MutableRefObject<number>} tileIdRef 
- * @returns {[Object[], number]}
+ * @returns {[TileProps[], number]}
  */
 function moveLeft(tiles, tileIdRef) {
+
+    /**
+     * @type {TileProps[]}
+     */
     let movedTiles = [];
     let newScore = 0;
     for (let i = 0; i < 4; i++) {
         let rowTiles = tiles.filter(tile => getPosition(tile.position).row === i);
         rowTiles.sort((a, b) => getPosition(a.position).col - getPosition(b.position).col); // Sort by column for the left move
+
+        /**
+         * @type {TileProps[]}
+         */
         let newRow = [];
         for (let j = 0; j < rowTiles.length; j++) {
             if (j < rowTiles.length - 1 && rowTiles[j].exp === rowTiles[j + 1].exp) {
@@ -18,7 +31,7 @@ function moveLeft(tiles, tileIdRef) {
                     id: tileIdRef.current++,
                     exp: mergedExp,
                     position: getIndex(i, newRow.length),
-                    // new: true
+                    newTile: true
                 });
                 newScore += Math.pow(2, mergedExp);
                 j++; // Skip the next element since it's merged
@@ -26,7 +39,7 @@ function moveLeft(tiles, tileIdRef) {
                 newRow.push({
                     ...rowTiles[j],
                     position: getIndex(i, newRow.length),
-                    // new: false
+                    newTile: false
                 });
             }
         }
@@ -37,10 +50,10 @@ function moveLeft(tiles, tileIdRef) {
 
 /**
  * 
- * @param {Object[]} tiles 
+ * @param {TileProps[]} tiles 
  * @param {number} action 
  * @param {React.MutableRefObject<number>} tileIdRef 
- * @returns {[Object[], number]}
+ * @returns {[TileProps[], number]}
  */
 export function gameStep(tiles, action, tileIdRef) {
     let newState = [...tiles]; // Create a shallow copy of tiles
@@ -77,6 +90,11 @@ export function gameStep(tiles, action, tileIdRef) {
 }
 
 
+/**
+ * 
+ * @param {TileProps[]} tiles 
+ * @returns {TileProps[]}
+ */
 function rotateClockwise(tiles) {
     return tiles.map(tile => {
         const { row, col } = getPosition(tile.position);
@@ -86,15 +104,31 @@ function rotateClockwise(tiles) {
 }
 
 
+/**
+ * 
+ * @param {number} index 
+ * @returns {{row: number, col: number}}
+ */
 function getPosition(index) {
     return { row: Math.floor(index / 4), col: index % 4 }; // Helper function to get row and column from index
 }
 
+/**
+ * 
+ * @param {number} row 
+ * @param {number} col 
+ * @returns {number}
+ */
 function getIndex(row, col) {
     return row * 4 + col; // Helper function to get index from row and column
 }
 
 
+/**
+ * 
+ * @param {TileProps[]} tiles 
+ * @returns {TileProps[]}
+ */
 function flipHorizontal(tiles) {
     return tiles.map(tile => {
         const { row, col } = getPosition(tile.position);
@@ -135,3 +169,57 @@ export function checkGameOver(tiles) {
 }
 
 
+/**
+ * 
+ * @param {Object[]} currentTiles 
+ * @param {React.MutableRefObject<number>} tileIdRef 
+ * @returns 
+ */
+export function spawnTile(currentTiles, tileIdRef) {
+    const emptyIndices = Array.from({ length: 16 }, (_, index) => index).filter(index => !currentTiles.some(tile => tile.position === index));
+    if (emptyIndices.length === 0) {
+        console.log('No space left!');
+        return;
+    }
+    const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    const newTile = {
+        id: tileIdRef.current++,  // Assume tileIdRef is still defined in your component to keep track of unique IDs
+        exp: Math.random() < 0.8 ? 1 : 2, // Exponent for 2 or 4
+        position: randomIndex,
+        newTile: true,
+    };
+    currentTiles.push(newTile);
+}
+
+
+/**
+ * 
+ * @param {Object[]} tiles 
+ * @returns {boolean}
+ */
+export function isValid(tiles) {
+    if (!Array.isArray(tiles) || tiles.length > 16 || tiles.length < 2) {
+        return false;
+    }
+
+    const positions = new Set();
+    const ids = new Set();
+
+    for (const tile of tiles) {
+        if (typeof tile !== 'object' || !('id' in tile) || !('exp' in tile) || !('position' in tile)) {
+            return false;
+        }
+        if (typeof tile.id !== 'number' || typeof tile.exp !== 'number' || typeof tile.position !== 'number') {
+            return false;
+        }
+        if (tile.position < 0 || tile.position >= 16 || tile.exp < 1 || tile.exp > 11) { // Assuming exp 11 for 2048
+            return false;
+        }
+        if (positions.has(tile.position) || ids.has(tile.id)) {
+            return false; // Duplicate position or id
+        }
+        positions.add(tile.position);
+        ids.add(tile.id);
+    }
+    return true;
+}
