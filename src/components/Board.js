@@ -4,10 +4,10 @@ import Tile from './Tile';
 /**
  * 
  * @param {Object} props
- * @param {Array<number>} props.exps
+ * @param {Array} props.tiles
  * @returns 
  */
-function Board({ exps }) {
+function Board({ tiles }) {
     return (
         <div className="flex flex-col items-center justify-center p-3 bg-[#bbada0] rounded-md w-full mt-4 relative">
             <div className="grid grid-cols-4 gap-2 w-full">
@@ -17,8 +17,8 @@ function Board({ exps }) {
             </div>
 
             <div className="absolute p-3 grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
-                {exps.map((exp, index) => (
-                    exp !== 0 && <Tile key={index} exp={exp} position={index} />
+                {tiles.map(tile => (
+                    <Tile key={tile.id} exp={tile.exp} position={tile.position} />
                 ))}
             </div>
 

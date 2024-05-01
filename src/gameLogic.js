@@ -1,84 +1,121 @@
+/**
+ * 
+ * @param {Object[]} tiles 
+ * @param {React.MutableRefObject<number>} tileIdRef 
+ * @returns {[Object[], number]}
+ */
+function moveLeft(tiles, tileIdRef) {
+    let movedTiles = [];
+    let newScore = 0;
+    for (let i = 0; i < 4; i++) {
+        let rowTiles = tiles.filter(tile => getPosition(tile.position).row === i);
+        rowTiles.sort((a, b) => getPosition(a.position).col - getPosition(b.position).col); // Sort by column for the left move
+        let newRow = [];
+        for (let j = 0; j < rowTiles.length; j++) {
+            if (j < rowTiles.length - 1 && rowTiles[j].exp === rowTiles[j + 1].exp) {
+                const mergedExp = rowTiles[j].exp + 1;
+                newRow.push({
+                    id: tileIdRef.current++,
+                    exp: mergedExp,
+                    position: getIndex(i, newRow.length),
+                    // new: true
+                });
+                newScore += Math.pow(2, mergedExp);
+                j++; // Skip the next element since it's merged
+            } else {
+                newRow.push({
+                    ...rowTiles[j],
+                    position: getIndex(i, newRow.length),
+                    // new: false
+                });
+            }
+        }
+        newRow.forEach(tile => movedTiles.push(tile));
+    }
+    return [movedTiles, newScore];
+}
 
 /**
  * 
- * @param {number[]} state 
+ * @param {Object[]} tiles 
  * @param {number} action 
- * @returns {[number[], number]}
+ * @param {React.MutableRefObject<number>} tileIdRef 
+ * @returns {[Object[], number]}
  */
-export function gameStep(state, action) {
-    let newState = [];
+export function gameStep(tiles, action, tileIdRef) {
+    let newState = [...tiles]; // Create a shallow copy of tiles
     let scoreInc = 0;
+
+
+    // Rotate, flip, and move logic goes here, similar to your original code, adapted to handle tile objects
 
     switch (action) {
         case 0: // Up
-            state = rotateClockwise(rotateClockwise(rotateClockwise(state))); // Rotate 270° clockwise to align for left move
-            [newState, scoreInc] = moveLeft(state);
-            newState = rotateClockwise(newState); // Rotate back 90° clockwise
+            newState = rotateClockwise(rotateClockwise(rotateClockwise(newState))); // Rotate 270° to align for a left move
+            [newState, scoreInc] = moveLeft(newState, tileIdRef);
+            newState = rotateClockwise(newState); // Rotate back 90°
             break;
         case 1: // Down
-            state = rotateClockwise(state); // Rotate 90° clockwise to align for left move
-            [newState, scoreInc] = moveLeft(state);
-            newState = rotateClockwise(rotateClockwise(rotateClockwise(newState))); // Rotate back 270° clockwise
-
+            newState = rotateClockwise(newState); // Rotate 90° to align for a left move
+            [newState, scoreInc] = moveLeft(newState, tileIdRef);
+            newState = rotateClockwise(rotateClockwise(rotateClockwise(newState))); // Rotate back 270°
             break;
         case 2: // Left
-            [newState, scoreInc] = moveLeft(state);
+            [newState, scoreInc] = moveLeft(newState, tileIdRef); // Direct left move
             break;
         case 3: // Right
-            state = flipHorizontal(state); // Flip horizontally to align for left move
-            [newState, scoreInc] = moveLeft(state);
+            newState = flipHorizontal(newState); // Flip horizontally to align for a left move
+            [newState, scoreInc] = moveLeft(newState, tileIdRef);
             newState = flipHorizontal(newState); // Flip back
             break;
         default:
             console.log("Invalid action!");
-            return [state, 0];
+            return [newState, 0];
     }
 
     return [newState, scoreInc];
 }
 
 
-/**
- * Rotates the board 90 degrees clockwise.
- * @param {number[]} state - The current state of the game board.
- * @returns {number[]} - The rotated game board.
- */
-function rotateClockwise(state) {
-    let newBoard = Array(16).fill(0);
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            newBoard[j * 4 + (3 - i)] = state[i * 4 + j];
-        }
-    }
-    return newBoard;
+function rotateClockwise(tiles) {
+    return tiles.map(tile => {
+        const { row, col } = getPosition(tile.position);
+        const newPosition = col * 4 + (3 - row);
+        return { ...tile, position: newPosition };
+    });
 }
 
 
-/**
- * Reflects the board horizontally.
- * @param {number[]} state - The current state of the game board.
- * @returns {number[]} - The horizontally flipped game board.
- */
-function flipHorizontal(state) {
-    let newBoard = Array(16).fill(0);
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            newBoard[i * 4 + j] = state[i * 4 + (3 - j)];
-        }
-    }
-    return newBoard;
+function getPosition(index) {
+    return { row: Math.floor(index / 4), col: index % 4 }; // Helper function to get row and column from index
 }
 
+function getIndex(row, col) {
+    return row * 4 + col; // Helper function to get index from row and column
+}
+
+
+function flipHorizontal(tiles) {
+    return tiles.map(tile => {
+        const { row, col } = getPosition(tile.position);
+        const newPosition = row * 4 + (3 - col);
+        return { ...tile, position: newPosition };
+    });
+}
+
+
+
 /**
- * Checks if there are any valid moves left on the board.
- * @param {number[]} state - The current state of the game board.
- * @returns {boolean} - True if no valid moves left, otherwise false.
+ * 
+ * @param {Object[]} tiles 
+ * @returns {boolean}
  */
-export function checkGameOver(state) {
-    // Check for any zeros (empty spaces)
-    if (state.includes(0)) {
-        return false;
-    }
+export function checkGameOver(tiles) {
+    // Check for any empty positions
+    if (tiles.length < 16) return false;
+
+    let state = Array(16).fill(0);
+    tiles.forEach(tile => state[tile.position] = tile.exp);
 
     // Check for possible merges horizontally and vertically
     for (let i = 0; i < 4; i++) {
@@ -98,41 +135,3 @@ export function checkGameOver(state) {
 }
 
 
-/**
- * Moves and merges tiles in the 2048 game to the left.
- * @param {number[]} state - The current state of the game board.
- * @returns {[number[], number]} - The new state of the game board and the score.
- */
-function moveLeft(state) {
-    let newBoard = [];
-    let score = 0;
-
-    // Process each row
-    for (let i = 0; i < 4; i++) {
-        let row = state.slice(i * 4, i * 4 + 4);
-        let newRow = [];
-
-        // Remove all zeros (simulate movement by compacting the row)
-        row = row.filter(val => val !== 0);
-
-        // Merge adjacent cells if they are the same
-        for (let j = 0; j < row.length; j++) {
-            if (row[j] === row[j + 1]) {
-                newRow.push(row[j] + 1); // Merge and increase exponent for base 2
-                score += Math.pow(2, row[j] + 1); // Add score based on merged value
-                j++; // Skip the next element as it's merged
-            } else {
-                newRow.push(row[j]);
-            }
-        }
-
-        // Fill the rest of the row with 0s
-        while (newRow.length < 4) {
-            newRow.push(0);
-        }
-
-        newBoard.push(...newRow);
-    }
-
-    return [newBoard, score];
-}
