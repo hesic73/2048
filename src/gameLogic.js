@@ -3,6 +3,14 @@
  */
 
 
+export const Action = Object.freeze({
+    UP: 0,
+    DOWN: 1,
+    LEFT: 2,
+    RIGHT: 3
+});
+
+
 /**
  * 
  * @param {TileProps[]} tiles 
@@ -56,6 +64,7 @@ function moveLeft(tiles, tileIdRef) {
  * @returns {[TileProps[], number]}
  */
 export function gameStep(tiles, action, tileIdRef) {
+
     let newState = [...tiles]; // Create a shallow copy of tiles
     let scoreInc = 0;
 
@@ -63,20 +72,20 @@ export function gameStep(tiles, action, tileIdRef) {
     // Rotate, flip, and move logic goes here, similar to your original code, adapted to handle tile objects
 
     switch (action) {
-        case 0: // Up
+        case Action.UP: // Up
             newState = rotateClockwise(rotateClockwise(rotateClockwise(newState))); // Rotate 270° to align for a left move
             [newState, scoreInc] = moveLeft(newState, tileIdRef);
             newState = rotateClockwise(newState); // Rotate back 90°
             break;
-        case 1: // Down
+        case Action.DOWN: // Down
             newState = rotateClockwise(newState); // Rotate 90° to align for a left move
             [newState, scoreInc] = moveLeft(newState, tileIdRef);
             newState = rotateClockwise(rotateClockwise(rotateClockwise(newState))); // Rotate back 270°
             break;
-        case 2: // Left
+        case Action.LEFT: // Left
             [newState, scoreInc] = moveLeft(newState, tileIdRef); // Direct left move
             break;
-        case 3: // Right
+        case Action.RIGHT: // Right
             newState = flipHorizontal(newState); // Flip horizontally to align for a left move
             [newState, scoreInc] = moveLeft(newState, tileIdRef);
             newState = flipHorizontal(newState); // Flip back

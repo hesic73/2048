@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Board from './components/Board';
 import Header from './components/Header';
+import MobileSwiper from './components/MobilrSwiper';
 
-import { gameStep, checkGameOver, checkWin, spawnTile, isValid } from './gameLogic';
+import { gameStep, checkGameOver, checkWin, spawnTile, isValid, Action } from './gameLogic';
 
 /**
  * @typedef {import('./types').TileProps} TileProps
@@ -128,10 +129,33 @@ function App() {
 
   const handleKeyPress = useCallback((event) => {
     if (gameState !== GameState.IN_PROGRESS) return;
-    const keyActionMap = { ArrowUp: 0, ArrowDown: 1, ArrowLeft: 2, ArrowRight: 3 };
+    const keyActionMap = { ArrowUp: Action.UP, ArrowDown: Action.DOWN, ArrowLeft: Action.LEFT, ArrowRight: Action.RIGHT };
     const action = keyActionMap[event.key];
     if (action !== undefined) makeMove(action);
   }, [gameState, makeMove]);
+
+
+  const handleSwipe = useCallback(
+    ({ deltaX, deltaY }) => {
+
+      if (gameState !== GameState.IN_PROGRESS) return;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX > 0) {
+          makeMove(Action.RIGHT);
+        } else {
+          makeMove(Action.LEFT);
+        }
+      } else {
+        if (deltaY > 0) {
+          makeMove(Action.DOWN);
+        } else {
+          makeMove(Action.UP);
+        }
+      }
+    },
+    [gameState, makeMove],
+  );
 
 
   useEffect(() => {
@@ -153,12 +177,14 @@ function App() {
 
 
   return (
-    <div className='flex flex-col min-h-screen bg-background_color'>
-      <div className="flex-1 mx-auto w-72 xl:w-[450px]">
-        <Header score={score} bestScore={bestScore} OnNewGame={reset}></Header>
-        <Board tiles={tiles}></Board>
+    <MobileSwiper onSwipe={handleSwipe}>
+      <div className='flex flex-col min-h-screen bg-background_color'>
+        <div className="flex-1 mx-auto w-72 xl:w-[450px]">
+          <Header score={score} bestScore={bestScore} OnNewGame={reset}></Header>
+          <Board tiles={tiles}></Board>
+        </div>
       </div>
-    </div>
+    </MobileSwiper>
   );
 }
 

@@ -5,9 +5,9 @@ React + Tailwind CSS
 
 ## TODO
 
-- 失败提示
+- 成功失败显示
 
-- 方块移动、合并、生成动画效果
+- 方块移动动画效果
 
 ## Limitations
 
@@ -16,3 +16,5 @@ React + Tailwind CSS
 ## Reference
 
 - https://github.com/gd4Ark/2048
+- https://github.com/mateuszsokola/2048-in-react/
+
