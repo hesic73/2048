@@ -19,7 +19,7 @@ export default function MobileSwiper({ children, onSwipe }) {
             return;
         }
 
-        e.preventDefault();
+        // e.preventDefault();
 
         setStartX(e.touches[0].clientX);
         setStartY(e.touches[0].clientY);
@@ -31,12 +31,20 @@ export default function MobileSwiper({ children, onSwipe }) {
                 return;
             }
 
-            e.preventDefault();
+
 
             const endX = e.changedTouches[0].clientX;
             const endY = e.changedTouches[0].clientY;
             const deltaX = endX - startX;
             const deltaY = endY - startY;
+
+
+            // If the swipe is too small, don't trigger it
+            if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
+                return;
+            }
+
+            // e.preventDefault();
 
             onSwipe({ deltaX, deltaY });
 
