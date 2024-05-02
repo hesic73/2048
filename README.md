@@ -7,8 +7,6 @@ React + Tailwind CSS
 
 - 成功失败显示
 
-- 方块移动动画效果
-
 ## Limitations
 
 - cannot handle overlapping score addition animations correctly (or maybe I can).

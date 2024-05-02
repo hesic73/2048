@@ -1,31 +1,47 @@
 import React from "react";
 
-
-
-
 /**
+ * Renders a single tile.
  * 
  * @param {Object} props
- * @param {number} props.exp
- * @param {number} props.position
- * @param {boolean} props.newTile
- * @returns 
+ * @param {number} props.exp - The exponent (power of 2) representing the tile's value.
+ * @param {number} props.position 
+ * @param {boolean} props.newTile - If the tile is newly added.
+ * @returns The tile component.
  */
 function Tile({ exp, position, newTile }) {
-    const rowStart = Math.floor(position / 4) + 1;
-    const colStart = position % 4 + 1;
+    const positionClass = getPositionClass(Math.floor(position / 4) + 1, (position % 4) + 1);
+    const newTileAnimation = newTile ? "animate-spawn duration-500" : "";
 
     const [bg_color, text_color] = getBgColorAndTextColor(exp);
     const text = exp === 0 ? "" : (2 ** exp).toString();
     const font_size = getFontSize(text);
 
-    let positionClass = getPositionClass(rowStart, colStart);
+    const moveAnimation = "transition-position duration-200 ease-out";
 
-    const newTileAnimation = newTile ? "animate-spawn duration-500" : "";
-
+    // Adding transparent padding within each tile
     return (
-        <div className={`aspect-square flex items-center justify-center ${bg_color} ${text_color} font-bold ${font_size} ${positionClass} ${newTileAnimation} rounded-[3px]`}>
-            {text}
+        <div className={`absolute w-1/4 h-1/4 ${positionClass} p-1 flex items-center justify-center ${moveAnimation} z-10`}>
+            <div className={`flex items-center justify-center w-full h-full ${bg_color} ${text_color} font-bold ${font_size} rounded-[3px] ${newTileAnimation}`}>
+                {text}
+            </div>
+        </div>
+    );
+}
+
+
+/**
+ * 
+ * @param {Object} props 
+ * @param {number} props.position
+ * @returns 
+ */
+export function Grid({ position }) {
+    const positionClass = getPositionClass(Math.floor(position / 4) + 1, (position % 4) + 1);
+    return (
+        <div className={`absolute w-1/4 h-1/4 ${positionClass} p-1 flex items-center justify-center`}>
+            <div className={`flex items-center justify-center w-full h-full bg-grid_cell_0 rounded-[3px]`}>
+            </div>
         </div>
     );
 }
@@ -41,18 +57,18 @@ function getPositionClass(rowStart, colStart) {
     let row_class, col_class;
 
     switch (rowStart) {
-        case 1: row_class = "row-start-1"; break;
-        case 2: row_class = "row-start-2"; break;
-        case 3: row_class = "row-start-3"; break;
-        case 4: row_class = "row-start-4"; break;
+        case 1: row_class = "top-0"; break;
+        case 2: row_class = "top-1/4"; break;
+        case 3: row_class = "top-2/4"; break;
+        case 4: row_class = "top-3/4"; break;
         default: break; // Optionally handle unexpected cases
     }
 
     switch (colStart) {
-        case 1: col_class = "col-start-1"; break;
-        case 2: col_class = "col-start-2"; break;
-        case 3: col_class = "col-start-3"; break;
-        case 4: col_class = "col-start-4"; break;
+        case 1: col_class = "left-0"; break;
+        case 2: col_class = "left-1/4"; break;
+        case 3: col_class = "left-2/4"; break;
+        case 4: col_class = "left-3/4"; break;
         default: break; // Optionally handle unexpected cases
     }
 

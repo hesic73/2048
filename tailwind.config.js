@@ -67,6 +67,9 @@ module.exports = {
         moveup: 'moveup 2s ease-out',
         spawn: 'spawn 0.5s ease-out',
       },
+      transitionProperty: {
+        'position': 'top, left', // Defines which properties are affected
+      },
 
 
     },

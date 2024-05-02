@@ -179,7 +179,7 @@ function App() {
   return (
     <MobileSwiper onSwipe={handleSwipe}>
       <div className='flex flex-col min-h-screen bg-background_color'>
-        <div className="flex-1 mx-auto w-72 xl:w-[450px]">
+        <div className="flex-1 mx-auto w-72 xl:w-[28rem]">
           <Header score={score} bestScore={bestScore} OnNewGame={reset}></Header>
           <Board tiles={tiles}></Board>
         </div>
