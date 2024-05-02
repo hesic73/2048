@@ -181,7 +181,19 @@ function App() {
       <div className='flex flex-col min-h-screen bg-background_color'>
         <div className="flex-1 mx-auto w-72 xl:w-[28rem]">
           <Header score={score} bestScore={bestScore} OnNewGame={reset}></Header>
-          <Board tiles={tiles}></Board>
+          <div className={`relative ${gameState !== GameState.IN_PROGRESS ? 'opacity-50' : ''}`}>
+            <Board tiles={tiles} />
+            {gameState === GameState.FAILED && (
+              <div className="absolute inset-0 flex justify-center items-center">
+                <span className="text-[#776e65] font-bold text-5xl xl:text-7xl z-20">FAILURE</span>
+              </div>
+            )}
+            {gameState === GameState.WIN && (
+              <div className="absolute inset-0 flex justify-center items-center">
+                <span className="text-[#776e65] font-bold text-5xl xl:text-7xl z-20">WINNING</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </MobileSwiper>

@@ -1,15 +1,13 @@
-# 2048
+# [2048](https://hesic73.github.io/2048/)
 
 React + Tailwind CSS
 
+## Features
 
-## TODO
+- Auto Saving
+- Animations for tile movement, spawning, and when you score
+- Support for keyboard navigation and swiping on mobile devices
 
-- 成功失败显示
-
-## Limitations
-
-- cannot handle overlapping score addition animations correctly (or maybe I can).
 
 ## Reference
 
